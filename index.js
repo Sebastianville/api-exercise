@@ -2,8 +2,16 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 
+import mongoose from "mongoose";
+
 import router from './routes/grades.js'
-import learnerRouter from "./routes/learners.js";
+
+
+//wait to connect to the DB (database)
+await mongoose
+  .connect(process.env.ATLAS_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch(e => console.error(e))
 
 const PORT = process.env.PORT || 5050;
 const app = express();
@@ -15,7 +23,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/grades', router)
-app.use('/learners', learnerRouter)
+
 
 // Global error handling
 app.use((err, _req, res, next) => {
